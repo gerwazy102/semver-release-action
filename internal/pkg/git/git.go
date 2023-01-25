@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/K-Phoen/semver-release-action/internal/pkg/action"
-	"github.com/K-Phoen/semver-release-action/internal/pkg/enterprise"
 	"github.com/blang/semver/v4"
+	"github.com/gerwazy102/semver-release-action/internal/pkg/action"
+	"github.com/gerwazy102/semver-release-action/internal/pkg/enterprise"
 	"github.com/google/go-github/v45/github"
 	"github.com/spf13/cobra"
 )
