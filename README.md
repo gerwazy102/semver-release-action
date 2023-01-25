@@ -31,6 +31,16 @@ release ; `tag`: creates a lightweight tag ; `none`: computes the next
 **Optional** Tag to use. If left undefined, it will be computed using the tags
 already present in the repository.
 
+### `github_api_url`
+
+**Optional** Optional url to github enterprise api endpoint.
+
+### `github_uploads_url`
+
+**Optional** Optional url to github enterprise uploads endpoint.
+
+
+
 ## Outputs
 
 ### `tag`

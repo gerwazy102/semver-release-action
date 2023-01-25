@@ -1,40 +1,50 @@
-name: 'Semver Release'
-description: 'Automatically create Semver compliant tags or releases based on PR labels'
-author: 'Kévin Gomez'
+name: "Semver Release"
+description: "Automatically create Semver compliant tags or releases based on PR labels"
+author: "Kévin Gomez"
 
 branding:
-  icon: 'tag'
-  color: 'green'
+  icon: "tag"
+  color: "green"
 
 inputs:
   release_branch:
-    description: 'Branch to tag'
+    description: "Branch to tag"
     required: true
     default: master
 
   release_strategy:
-    description: 'Release strategy'
+    description: "Release strategy"
     required: true
     default: release
 
   tag_format:
-    description: 'Format used to create tags'
+    description: "Format used to create tags"
     required: true
-    default: 'v%major%.%minor%.%patch%'
+    default: "v%major%.%minor%.%patch%"
 
   tag:
-    description: 'Tag to use'
+    description: "Tag to use"
+    required: false
+
+  github_api_url:
+    description: "URL to github enterprise api"
+    required: false
+
+  github_uploads_url:
+    description: "URL to github enterprise uploads"
     required: false
 
 outputs:
   tag:
-    description: 'The newly created tag'
+    description: "The newly created tag"
 
 runs:
-  using: 'docker'
-  image: 'docker://kphoen/semver-release-action:v1.3.2'
+  using: "docker"
+  image: "docker://kphoen/semver-release-action:v1.3.2"
   args:
     - ${{ inputs.release_branch }}
     - ${{ inputs.release_strategy }}
     - ${{ inputs.tag }}
     - ${{ inputs.tag_format }}
+    - ${{ inputs.github_api_url}}
+    - ${{ inputs.github_uploads_url}}
