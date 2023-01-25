@@ -23,8 +23,8 @@ func LatestTagCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&githubApiUrl, "github_api_url", "a", "", "Github enterprise api url")
-	cmd.Flags().StringVarP(&githubUploadUrl, "github_upload_url", "u", "", "Github enterprise upload url")
+	cmd.Flags().StringVarP(&githubApiUrl, "github-api-url", "a", "", "Github enterprise api url")
+	cmd.Flags().StringVarP(&githubUploadUrl, "github-uploads-url", "u", "", "Github enterprise upload url")
 
 	return cmd
 }
