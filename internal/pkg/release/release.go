@@ -28,21 +28,25 @@ type releaseDetails struct {
 
 func Command() *cobra.Command {
 	var releaseType string
+	var githubApiUrl string
+	var githubUploadUrl string
 
 	cmd := &cobra.Command{
 		Use:  "release [REPOSITORY] [TARGET_COMMITISH] [VERSION] [GH_TOKEN]",
 		Args: cobra.ExactArgs(4),
 		Run: func(cmd *cobra.Command, args []string) {
-			execute(cmd, releaseType, args)
+			execute(cmd, releaseType, githubApiUrl, githubUploadUrl, args)
 		},
 	}
 
 	cmd.Flags().StringVarP(&releaseType, "strategy", "s", releaseTypeRelease, "Release strategy")
+	cmd.Flags().StringVarP(&githubApiUrl, "github_api_url", "a", "", "Github enterprise api url")
+	cmd.Flags().StringVarP(&githubUploadUrl, "github_upload_url", "u", "", "Github enterprise upload url")
 
 	return cmd
 }
 
-func execute(cmd *cobra.Command, releaseType string, args []string) {
+func execute(cmd *cobra.Command, releaseType, githubApiUrl, githubUploadUrl string, args []string) {
 	parts := strings.Split(args[0], "/")
 	repo := repository{
 		owner: parts[0],
@@ -59,6 +63,16 @@ func execute(cmd *cobra.Command, releaseType string, args []string) {
 
 	tokenSource := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: repo.token})
 	client := github.NewClient(oauth2.NewClient(ctx, tokenSource))
+	if githubApiUrl != "" {
+		if githubUploadUrl == "" {
+			githubUploadUrl = strings.Replace(githubApiUrl, "api", "uploads", 1)
+		}
+		var err error
+		client, err = github.NewEnterpriseClient(githubApiUrl, githubUploadUrl, oauth2.NewClient(ctx, tokenSource))
+		if err != nil {
+			action.AssertNoError(cmd, err, "could not connect to github enterprise api: %s", err)
+		}
+	}
 
 	switch releaseType {
 	case releaseTypeNone:
