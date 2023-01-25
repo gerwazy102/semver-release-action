@@ -6,28 +6,39 @@ import (
 	"strings"
 
 	"github.com/K-Phoen/semver-release-action/internal/pkg/action"
+	"github.com/K-Phoen/semver-release-action/internal/pkg/enterprise"
 	"github.com/blang/semver/v4"
 	"github.com/google/go-github/v45/github"
 	"github.com/spf13/cobra"
-	"golang.org/x/oauth2"
 )
 
 func LatestTagCommand() *cobra.Command {
-	return &cobra.Command{
+	var githubApiUrl string
+	var githubUploadUrl string
+	cmd := &cobra.Command{
 		Use:  "latest-tag [REPOSITORY] [GH_TOKEN]",
 		Args: cobra.ExactArgs(2),
-		Run:  executeLatestTag,
+		Run: func(cmd *cobra.Command, args []string) {
+			executeLatestTag(cmd, githubApiUrl, githubUploadUrl, args)
+		},
 	}
+
+	cmd.Flags().StringVarP(&githubApiUrl, "github_api_url", "a", "", "Github enterprise api url")
+	cmd.Flags().StringVarP(&githubUploadUrl, "github_upload_url", "u", "", "Github enterprise upload url")
+
+	return cmd
 }
 
-func executeLatestTag(cmd *cobra.Command, args []string) {
+func executeLatestTag(cmd *cobra.Command, githubApiUrl, githubUploadUrl string, args []string) {
 	repository := args[0]
 	githubToken := args[1]
 
 	ctx := context.Background()
 
-	tokenSource := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: githubToken})
-	client := github.NewClient(oauth2.NewClient(ctx, tokenSource))
+	client, err := enterprise.NewGithubClient(ctx, githubToken, githubApiUrl, githubUploadUrl)
+	if err != nil {
+		action.AssertNoError(cmd, err, "could not connect to github enterprise api: %s", err)
+	}
 
 	parts := strings.Split(repository, "/")
 	owner := parts[0]
