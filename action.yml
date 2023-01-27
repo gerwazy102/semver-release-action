@@ -41,10 +41,12 @@ inputs:
 outputs:
   tag:
     description: "The newly created tag"
+  increment:
+    description: "Increment type performed if any"
 
 runs:
   using: "docker"
-  image: "docker://gerwazy102/semver-release-action:v1.3.0"
+  image: "docker://gerwazy102/semver-release-action:v1.4.0"
   args:
     - ${{ inputs.release_branch }}
     - ${{ inputs.release_strategy }}
