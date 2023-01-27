@@ -39,7 +39,9 @@ already present in the repository.
 
 **Optional** Optional url to github enterprise uploads endpoint.
 
+### `custom_release_sha`
 
+**Optional** Custom git commit sha for github release.
 
 ## Outputs
 
