@@ -14,6 +14,7 @@ NEXT_TAG="$3"
 TAG_FORMAT="$4"
 GITHUB_API_URL="$5"
 GITHUB_UPLOADS_URL="$6"
+CUSTOM_RELEASE_SHA="$7"
 
 echo ::Executing bumper guard ::debug release_branch=${RELEASE_BRANCH},github_event_path=${GITHUB_EVENT_PATH}
 /bumper guard "${RELEASE_BRANCH}" "${GITHUB_EVENT_PATH}"
@@ -33,6 +34,11 @@ then
 
     echo ::debug ::Executing bumper semver latest_tag=${LATEST_TAG},increment=${INCREMENT}
     NEXT_TAG=$(/bumper semver "${LATEST_TAG}" "${INCREMENT}" "${TAG_FORMAT}")
+fi
+
+if [ ! -z "${CUSTOM_RELEASE_SHA}" ]
+then
+    GITHUB_SHA=${CUSTOM_RELEASE_SHA}
 fi
 
 echo ::debug ::Executing bumper release github_repository=${GITHUB_REPOSITORY},github_sha=${GITHUB_SHA},next_tag=${NEXT_TAG},strategy=${RELEASE_STRATEGY}

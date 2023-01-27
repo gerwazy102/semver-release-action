@@ -34,6 +34,10 @@ inputs:
     description: "URL to github enterprise uploads"
     required: false
 
+  custom_release_sha:
+    description: "git commit sha to use for release"
+    required: false
+
 outputs:
   tag:
     description: "The newly created tag"
@@ -46,5 +50,6 @@ runs:
     - ${{ inputs.release_strategy }}
     - ${{ inputs.tag }}
     - ${{ inputs.tag_format }}
-    - ${{ inputs.github_api_url}}
-    - ${{ inputs.github_uploads_url}}
+    - ${{ inputs.github_api_url }}
+    - ${{ inputs.github_uploads_url }}
+    - ${{ inputs.custom_release_sha }}
