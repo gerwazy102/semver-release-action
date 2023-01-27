@@ -15,6 +15,7 @@ TAG_FORMAT="$4"
 GITHUB_API_URL="$5"
 GITHUB_UPLOADS_URL="$6"
 CUSTOM_RELEASE_SHA="$7"
+INCREMENT=""
 
 echo ::Executing bumper guard ::debug release_branch=${RELEASE_BRANCH},github_event_path=${GITHUB_EVENT_PATH}
 /bumper guard "${RELEASE_BRANCH}" "${GITHUB_EVENT_PATH}"
@@ -45,3 +46,4 @@ echo ::debug ::Executing bumper release github_repository=${GITHUB_REPOSITORY},g
 /bumper release --strategy "${RELEASE_STRATEGY}" --github-api-url "${GITHUB_API_URL}" --github-uploads-url "${GITHUB_UPLOADS_URL}" "${GITHUB_REPOSITORY}" "${GITHUB_SHA}" "${NEXT_TAG}" "${GITHUB_TOKEN}"
 
 echo ::set-output name=tag::${NEXT_TAG}
+echo ::set-output name=increment::${INCREMENT}

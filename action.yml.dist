@@ -41,6 +41,8 @@ inputs:
 outputs:
   tag:
     description: "The newly created tag"
+  increment:
+    description: "Increment type performed if any"
 
 runs:
   using: "docker"

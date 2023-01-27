@@ -49,6 +49,9 @@ already present in the repository.
 
 The newly created tag.
 
+### `increment`
+
+Type of increment if any
 ## Example usage
 
 ```yaml
