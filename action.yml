@@ -38,6 +38,10 @@ inputs:
     description: "git commit sha to use for release"
     required: false
 
+  version_range:
+    description: "version range when searching for latest-tag"
+    required: false
+
 outputs:
   tag:
     description: "The newly created tag"
@@ -46,7 +50,7 @@ outputs:
 
 runs:
   using: "docker"
-  image: "docker://gerwazy102/semver-release-action:v1.4.0"
+  image: "docker://gerwazy102/semver-release-action:latest"
   args:
     - ${{ inputs.release_branch }}
     - ${{ inputs.release_strategy }}
@@ -55,3 +59,4 @@ runs:
     - ${{ inputs.github_api_url }}
     - ${{ inputs.github_uploads_url }}
     - ${{ inputs.custom_release_sha }}
+    - ${{ inputs.version_range }}

@@ -15,21 +15,23 @@ import (
 func LatestTagCommand() *cobra.Command {
 	var githubApiUrl string
 	var githubUploadUrl string
+	var versionRange string
 	cmd := &cobra.Command{
 		Use:  "latest-tag [REPOSITORY] [GH_TOKEN]",
 		Args: cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
-			executeLatestTag(cmd, githubApiUrl, githubUploadUrl, args)
+			executeLatestTag(cmd, githubApiUrl, githubUploadUrl, versionRange, args)
 		},
 	}
 
 	cmd.Flags().StringVarP(&githubApiUrl, "github-api-url", "a", "", "Github enterprise api url")
 	cmd.Flags().StringVarP(&githubUploadUrl, "github-uploads-url", "u", "", "Github enterprise upload url")
+	cmd.Flags().StringVarP(&versionRange, "version-range", "r", "", "Version range to select latest-tag from")
 
 	return cmd
 }
 
-func executeLatestTag(cmd *cobra.Command, githubApiUrl, githubUploadUrl string, args []string) {
+func executeLatestTag(cmd *cobra.Command, githubApiUrl, githubUploadUrl, versionRange string, args []string) {
 	repository := args[0]
 	githubToken := args[1]
 
@@ -52,6 +54,8 @@ func executeLatestTag(cmd *cobra.Command, githubApiUrl, githubUploadUrl string, 
 		return
 	}
 	action.AssertNoError(cmd, err, "could not list git refs: %s", err)
+	expectedRange, err := semver.ParseRange(versionRange)
+	action.AssertNoError(cmd, err, "could not create version range: %s", err)
 
 	latest := semver.MustParse("0.0.0")
 	for _, ref := range refs {
@@ -59,8 +63,7 @@ func executeLatestTag(cmd *cobra.Command, githubApiUrl, githubUploadUrl string, 
 		if err != nil {
 			continue
 		}
-
-		if version.GT(latest) {
+		if expectedRange(version) && version.GT(latest) {
 			latest = version
 		}
 	}

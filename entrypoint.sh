@@ -15,6 +15,7 @@ TAG_FORMAT="$4"
 GITHUB_API_URL="$5"
 GITHUB_UPLOADS_URL="$6"
 CUSTOM_RELEASE_SHA="$7"
+VERSION_RANGE="$8"
 INCREMENT=""
 
 echo ::Executing bumper guard ::debug release_branch=${RELEASE_BRANCH},github_event_path=${GITHUB_EVENT_PATH}
@@ -28,7 +29,7 @@ fi
 if [ -z "${NEXT_TAG}" ]
 then
     echo ::debug ::Executing bumper latest-tag github_repository=${GITHUB_REPOSITORY}
-    LATEST_TAG=$(/bumper latest-tag "${GITHUB_REPOSITORY}" "${GITHUB_TOKEN}" --github-api-url "${GITHUB_API_URL}" --github-uploads-url "${GITHUB_UPLOADS_URL}")
+    LATEST_TAG=$(/bumper latest-tag "${GITHUB_REPOSITORY}" "${GITHUB_TOKEN}" --github-api-url "${GITHUB_API_URL}" --github-uploads-url "${GITHUB_UPLOADS_URL}" --version-range "${VERSION_RANGE}")
 
     echo ::debug ::Executing bumper increment github_event_path=${GITHUB_EVENT_PATH}
     INCREMENT=$(/bumper increment "${GITHUB_EVENT_PATH}")
