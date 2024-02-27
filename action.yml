@@ -40,7 +40,8 @@ inputs:
 
   version_range:
     description: "version range when searching for latest-tag"
-    required: false
+    required: true
+    default: ">0.0.0"
 
 outputs:
   tag:
@@ -50,7 +51,7 @@ outputs:
 
 runs:
   using: "docker"
-  image: "docker://gerwazy102/semver-release-action:v1.4.0"
+  image: "docker://gerwazy102/semver-release-action:v1.5.0"
   args:
     - ${{ inputs.release_branch }}
     - ${{ inputs.release_strategy }}
