@@ -35,4 +35,4 @@ linters:
     - lll # hard to fulfill
 
 run:
-  modules-download-mode: vendor
+  modules-download-mode: readonly
